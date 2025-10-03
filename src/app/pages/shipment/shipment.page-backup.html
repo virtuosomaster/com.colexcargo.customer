@@ -1,0 +1,79 @@
+<ion-header >
+  <ion-toolbar color="primary">
+    <ion-title>Shipments Details</ion-title>
+  </ion-toolbar>
+</ion-header>
+<ion-content>
+  <ion-fab-button size="small" color="success" (click)="returnList()" slot="fixed"><ion-icon name="return-down-back-outline"></ion-icon></ion-fab-button>
+  <div class="ion-text-center ion-margin-vertical" *ngIf="onLoad">
+    <h1 class="ion-no-margin">{{ shipmentData.shipment_number }}</h1>
+    <ion-text color="medium">
+      <p class="ion-no-padding ion-no-margin">{{shipmentData.wpcargo_status}}</p>
+    </ion-text>
+  </div>
+  <ion-card *ngIf="onLoad">
+    <ion-card-header color="secondary">
+      Shipper Details 
+    </ion-card-header>
+    <ion-card-content class="ion-margin-top">
+      <p *ngFor="let field of shipperFields">{{field.value}}: {{shipmentData[field.key]}}</p>
+    </ion-card-content>
+  </ion-card>
+  <ion-card *ngIf="onLoad">
+    <ion-card-header color="secondary">
+      Receiver Details 
+    </ion-card-header>
+    <ion-card-content class="ion-margin-top">
+      <p *ngFor="let field of receiverFields">{{field.value}}: {{shipmentData[field.key]}}</p>
+    </ion-card-content>
+  </ion-card>
+  <ion-card  *ngIf="onLoad">
+    <ion-card-header color="secondary" (click)="hidePackage()">
+      Package Details <ion-icon [name]="viewPackageIcon" class="ion-float-end" color="light" ></ion-icon>
+    </ion-card-header>
+    <ion-card-content class="ion-margin-top" *ngIf="viewPackage == true">
+
+      <ion-grid>
+        <ion-row>
+          <ion-col class="header">QTY</ion-col>
+          <ion-col  class="header">Type</ion-col>
+          <ion-col  class="header">Description</ion-col>
+        </ion-row>
+        <ion-row *ngFor="let package of shipmentFullData['shipment_packages'];  index as i;">
+
+          <ion-col>{{shipmentFullData['shipment_packages'][i]['wpc-pm-qty']}}</ion-col>
+          <ion-col>{{shipmentFullData['shipment_packages'][i]['wpc-pm-piece-type']}}</ion-col>
+          <ion-col>{{shipmentFullData['shipment_packages'][i]['wpc-pm-description']}}</ion-col>
+        </ion-row>
+      </ion-grid>
+
+      
+    </ion-card-content>
+  </ion-card>
+
+  <ion-card *ngIf="onLoad">
+    <ion-card-header color="secondary" (click)="hideHistory()">
+      History  <ion-icon [name]="viewHistoryIcon" class="ion-float-right" color="light"></ion-icon>
+    </ion-card-header>
+    <ion-card-content class="ion-margin-top" *ngIf="viewHistory">
+      <table id="history" *ngIf="shipmentData.history.length > 0;">
+        <tr *ngFor="let history of shipmentData.history">
+          <td class="border-right align-right">
+            <span class="bold">{{history.date}}</span><br/><span class="muted">{{history.time}} </span>
+          </td>
+          <td class="details">
+            <span *ngIf="history.remarks.length > 0" class="bold remarks">{{history.remarks}}</span>
+            <span *ngIf="history.location.length > 0" class="remarks">{{history.location}}</span>
+            <span *ngIf="history.status.length > 0" class="muted small">{{history.status}}</span>
+          </td>
+        </tr>
+      </table>
+    </ion-card-content>
+  </ion-card>
+  <div class="ion-text-center ion-margin-vertical" *ngIf="!onLoad">
+    <ion-text color="warning">
+      <ion-icon name="hourglass-outline"></ion-icon> 
+      Preparing data...
+    </ion-text>
+  </div>
+</ion-content>

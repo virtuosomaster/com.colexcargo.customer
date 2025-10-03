@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Colex Cargo Customer App</string>
+    <string name="title_activity_main">Colex Cargo Customer App</string>
+    <string name="package_name">com.colexcargo.customer</string>
+    <string name="custom_url_scheme">com.colexcargo.customer</string>
+</resources>

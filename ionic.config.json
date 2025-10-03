@@ -1,0 +1,8 @@
+{
+  "name": "Colex Cargo Customer App",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular",
+  "id": "75478538"
+}

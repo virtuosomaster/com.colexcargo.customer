@@ -1,0 +1,31 @@
+<!-- <ion-tabs id="dark_backgrounded">
+  <ion-tab-bar class="ion-no-background" slot="bottom">
+    <ion-tab-button class="ion-no-background" tab="dashboard">
+      <img class="tab_icon" src="../../../assets/images/home.png" alt="icon">
+      <ion-label class="tab-labels">Hogar</ion-label>
+    </ion-tab-button>
+    <ion-tab-button class="ion-no-background" tab="view">
+      <img class="tab_icon" src="../../../assets/images/track.png" alt="icon">
+      <ion-label class="tab-labels">Pista</ion-label>
+    </ion-tab-button>
+    <ion-tab-button class="ion-no-background" tab="create">
+      <img class="tab_icon" src="../../../assets/images/add.png" alt="icon">
+    </ion-tab-button>
+    <ion-tab-button class="ion-no-background" tab="support-desk">
+      <img class="tab_icon" src="../../../assets/images/customer-service.png" alt="icon">
+      <ion-label class="tab-labels">Apoyo</ion-label>
+    </ion-tab-button>
+    <ion-tab-button class="ion-no-background" tab="accounts">
+      <img class="tab_icon" src="../../../assets/images/account.png" alt="icon">
+      <ion-label class="tab-labels">Cuenta</ion-label>
+    </ion-tab-button>
+  </ion-tab-bar>
+</ion-tabs> -->
+<ion-tabs id="dark_backgrounded">
+  <ion-tab-bar #home slot="bottom" color="clear" class="ion-tab-heightened">
+    <ion-tab-button *ngFor="let p of tabBarPages" [tab]="p.tab" class="ion-no-background">
+      <ion-icon class="tab-icons" [name]="p.icon" class="horizon-icons"></ion-icon>
+      <!-- <ion-label class="tab-labels">{{ p.title }}</ion-label> -->
+    </ion-tab-button>
+  </ion-tab-bar>
+</ion-tabs>

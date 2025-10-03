@@ -1,0 +1,459 @@
+<ion-content padding='true' class="backgrounded-white">
+  <div id="content-wrapper">
+    <div id="logo-with-text">
+      <img id="app-logo" src="../../../assets/images/logo-white.png" alt="Site Logo">
+    </div>
+
+    <div class="welcome-text-main">
+      <section id="section-main-content">
+        <h1 class="smaller-text ion-text-center">Create New Account</h1>
+        <form [formGroup]="signUpForm" (ngSubmit)="registerNewAccount()">
+          <div [ngSwitch]="authType">
+            <!-- Email and password details -->
+            <ng-template [ngSwitchCase]="'email'">
+              <ion-grid class="underlined">
+                <ion-row class="ion-no-padding ion-align-items-center">
+                  <ion-col size="1" class="ion-no-padding">
+                    <img class="input-icon" src="../../../assets/images/email.png" alt="icon">
+                  </ion-col>
+                  <ion-col size="11" class="ion-no-padding">
+                    <ion-input required type="text" placeholder="Enter Email Address" id="email" formControlName="email"
+                      (ionChange)="runTimeChange($event)"></ion-input>
+                  </ion-col>
+                </ion-row>
+              </ion-grid>
+
+              <ion-row class="ion-padding-bottom">
+                <ion-col size="12" class="ion-no-padding">
+                  <div class="error-container">
+                    <ng-container *ngFor="let validation of validation_messages.email">
+                      <div class="error-message"
+                        *ngIf="signUpForm.get('email').hasError(validation.type) && (signUpForm.get('email').dirty || signUpForm.get('email').touched)">
+                        <ion-icon name="information-circle-outline"></ion-icon>
+                        <span class="error-text">{{ validation.message }}</span>
+                      </div>
+                    </ng-container>
+                  </div>
+                </ion-col>
+              </ion-row>
+  
+              <ion-grid class="underlined">  
+                <ion-row class="ion-no-padding ion-align-items-center">
+                  <ion-col size="1" class="ion-no-padding">
+                    <img class="input-icon" src="../../../assets/images/email.png" alt="icon">
+                  </ion-col>
+                  <ion-col size="11" class="ion-no-padding">
+                    <ion-input required type="text" placeholder="Enter Email Address"
+                      formControlName="confirm_email"></ion-input>
+                  </ion-col>
+                </ion-row>
+              </ion-grid>
+
+              <ion-row class="ion-padding-bottom">
+                <ion-col size="12" class="ion-no-padding">
+                  <div class="error-container">
+                    <ng-container *ngFor="let validation of validation_messages.confirm_email">
+                      <div class="error-message"
+                        *ngIf="signUpForm.get('confirm_email').hasError(validation.type) && (signUpForm.get('confirm_email').dirty || signUpForm.get('confirm_email').touched)">
+                        <ion-icon name="information-circle-outline"></ion-icon>
+                        <span class="error-text">{{ validation.message }}</span>
+                      </div>
+                    </ng-container>
+                  </div>
+                </ion-col>
+              </ion-row>
+  
+              <ion-grid class="underlined">
+                <ion-row class="ion-no-padding ion-align-items-center">
+                  <ion-col size="1" class="ion-no-padding">
+                    <img class="input-icon" src="../../../assets/images/padlock.png" alt="icon">
+                  </ion-col>
+                  <ion-col size="11" class="ion-no-padding">
+                    <ion-input required type="password" placeholder="Enter New Password" formControlName="password"
+                      id="password" (ionChange)="runTimeChange($event)"></ion-input>
+                  </ion-col>
+                </ion-row>
+              </ion-grid>
+
+              <ion-row class="ion-padding-bottom">
+                <ion-col size="12" class="ion-no-padding">
+                  <div class="error-container">
+                    <ng-container *ngFor="let validation of validation_messages.password">
+                      <div class="error-message"
+                        *ngIf="signUpForm.get('password').hasError(validation.type) && (signUpForm.get('password').dirty || signUpForm.get('password').touched)">
+                        <ion-icon name="information-circle-outline"></ion-icon>
+                        <span class="error-text">{{ validation.message }}</span>
+                      </div>
+                    </ng-container>
+                  </div>
+                </ion-col>
+              </ion-row>
+  
+              <ion-grid class="underlined">
+                <ion-row class="ion-no-padding ion-align-items-center">
+                  <ion-col size="1" class="ion-no-padding">
+                    <img class="input-icon" src="../../../assets/images/padlock.png" alt="icon">
+                  </ion-col>
+                  <ion-col size="11" class="ion-no-padding">
+                    <ion-input required type="password" placeholder="Confirm Password"
+                      formControlName="confirm_password"></ion-input>
+                  </ion-col>
+                </ion-row>
+              </ion-grid>
+
+              <ion-row class="ion-padding-bottom">
+                <ion-col size="12" class="ion-no-padding">
+                  <!-- <ion-label class="label-bold" position="stacked">Confirm Password</ion-label> -->
+                  <div class="error-container">
+                    <ng-container *ngFor="let validation of validation_messages.confirm_password">
+                      <div class="error-message"
+                        *ngIf="signUpForm.get('confirm_password').hasError(validation.type) && (signUpForm.get('confirm_password').dirty || signUpForm.get('confirm_password').touched)">
+                        <ion-icon name="information-circle-outline"></ion-icon>
+                        <span class="error-text">{{ validation.message }}</span>
+                      </div>
+                    </ng-container>
+                  </div>
+                </ion-col>
+              </ion-row>
+  
+              <ion-grid>
+                <ion-row>
+                  <ion-col size="12" class="ion-text-center">
+                    <ion-button fill="solid" class="wpc-button-sm-green ion-text-uppercase"
+                      (click)="Switchto('personal')" expand = "full">Next</ion-button>
+                  </ion-col>
+                  <ion-col size="12" class="ion-text-center">
+                    <ion-button fill="solid" class="wpc-button-sm-red ion-text-uppercase"
+                      (click)="returnToLogin()" expand = "full" color = "tertiary">Cancel</ion-button>
+                  </ion-col>
+                </ion-row>
+              </ion-grid>
+            </ng-template>
+  
+            <!-- Personal and billing details  -->
+            <ng-template [ngSwitchCase]="'personal'">
+              <ion-grid class="underlined"> 
+                <ion-row class="ion-no-padding ion-align-items-center">
+                  <ion-col size="1" class="ion-no-padding">
+                    <img class="input-icon" src="../../../assets/images/account.png" alt="icon">
+                  </ion-col>
+                  <ion-col size="11" class="ion-no-padding">
+                    <ion-input required type="text" placeholder="Enter First Name" formControlName="first_name"
+                      id="first_name" (ionChange)="runTimeChange($event)"></ion-input>
+                  </ion-col>
+                </ion-row>
+              </ion-grid>
+
+              <ion-row class="ion-padding-bottom">
+                <ion-col size="12" class="ion-no-padding">
+                  <div class="error-container">
+                    <ng-container *ngFor="let validation of validation_messages.first_name">
+                      <div class="error-message"
+                        *ngIf="signUpForm.get('first_name').hasError(validation.type) && (signUpForm.get('first_name').dirty || signUpForm.get('first_name').touched)">
+                        <ion-icon name="information-circle-outline"></ion-icon>
+                        <span class="error-text">{{ validation.message }}</span>
+                      </div>
+                    </ng-container>
+                  </div>
+                </ion-col>
+              </ion-row>
+  
+              <ion-grid class="underlined">
+                <ion-row class="ion-no-padding ion-align-items-center">
+                  <ion-col size="1" class="ion-no-padding">
+                    <img class="input-icon" src="../../../assets/images/account.png" alt="icon">
+                  </ion-col>
+                  <ion-col size="11" class="ion-no-padding">
+                    <ion-input required type="text" placeholder="Enter Last Name" formControlName="last_name"
+                      id="last_name" (ionChange)="runTimeChange($event)"></ion-input>
+                  </ion-col>
+                </ion-row>
+              </ion-grid>
+
+              <ion-row class="ion-padding-bottom">
+                <ion-col size="12" class="ion-no-padding">
+                  <div class="error-container">
+                    <ng-container *ngFor="let validation of validation_messages.last_name">
+                      <div class="error-message"
+                        *ngIf="signUpForm.get('last_name').hasError(validation.type) && (signUpForm.get('last_name').dirty || signUpForm.get('last_name').touched)">
+                        <ion-icon name="information-circle-outline"></ion-icon>
+                        <span class="error-text">{{ validation.message }}</span>
+                      </div>
+                    </ng-container>
+                  </div>
+                </ion-col>
+              </ion-row>
+  
+              <ion-grid class="underlined">  
+                <ion-row class="ion-no-padding ion-align-items-center">
+                  <ion-col size="1" class="ion-no-padding">
+                    <img class="input-icon" src="../../../assets/images/earth.png" alt="icon">
+                  </ion-col>
+                  <ion-col size="11" class="ion-no-padding">
+                    <ion-input required type="text" placeholder="Enter Street Name , Locality"
+                      formControlName="billing_address_1" (ionChange)="runTimeChange($event)"
+                      id="billing_address_1"></ion-input>
+                  </ion-col>
+                </ion-row>
+              </ion-grid>
+
+              <ion-row class="ion-padding-bottom">
+                <ion-col size="12" class="ion-no-padding">
+                  <div class="error-container">
+                    <ng-container *ngFor="let validation of validation_messages.billing_address_1">
+                      <div class="error-message"
+                        *ngIf="signUpForm.get('billing_address_1').hasError(validation.type) && (signUpForm.get('billing_address_1').dirty || signUpForm.get('billing_address_1').touched)">
+                        <ion-icon name="information-circle-outline"></ion-icon>
+                        <span class="error-text">{{ validation.message }}</span>
+                      </div>
+                    </ng-container>
+                  </div>
+                </ion-col>
+              </ion-row>
+  
+              <ion-grid class="underlined"> 
+                <ion-row class="ion-no-padding ion-align-items-center">
+                  <ion-col size="1" class="ion-no-padding">
+                    <img class="input-icon" src="../../../assets/images/earth.png" alt="icon">
+                  </ion-col>
+                  <ion-col size="11" class="ion-no-padding">
+                    <ion-input required type="text" placeholder="Enter House #, Aprt. #"
+                      formControlName="billing_address_2" (ionChange)="runTimeChange($event)"
+                      id="billing_address_2"></ion-input>
+                  </ion-col>
+                </ion-row>
+              </ion-grid>
+  
+              <ion-row class="ion-padding-bottom">
+                <ion-col size="12" class="ion-no-padding">
+                  <div class="error-container">
+                    <ng-container *ngFor="let validation of validation_messages.billing_address_2">
+                      <div class="error-message"
+                        *ngIf="signUpForm.get('billing_address_2').hasError(validation.type) && (signUpForm.get('billing_address_2').dirty || signUpForm.get('billing_address_2').touched)">
+                        <ion-icon name="information-circle-outline"></ion-icon>
+                        <span class="error-text">{{ validation.message }}</span>
+                      </div>
+                    </ng-container>
+                  </div>
+                </ion-col>
+              </ion-row>
+
+              <ion-grid class="underlined">
+                <ion-row class="ion-no-padding ion-align-items-center">
+                  <ion-col size="1" class="ion-no-padding">
+                    <img class="input-icon" src="../../../assets/images/earth.png" alt="icon">
+                  </ion-col>
+                  <ion-col size="11" class="ion-no-padding">
+                    <ion-select placeholder="Select Country" class="input-sm" justify="space-between" required
+                      id="billing_country" formControlName="billing_country" toggleIcon="caret-down-circle-outline"
+                      expandedIcon="remove" aria-label="Select billing_country" (ionChange)="loadAllState($event)">
+                      <ion-select-option *ngFor="let country of allCountries"
+                        value="{{country.name}}">{{country.name}}</ion-select-option>
+                    </ion-select>
+                  </ion-col>
+                </ion-row>
+              </ion-grid>
+
+              <ion-row class="ion-padding-bottom">
+                <ion-col size="12" class="ion-no-padding">
+                  <div class="error-container">
+                    <ng-container *ngFor="let validation of validation_messages.billing_country">
+                      <div class="error-message"
+                        *ngIf="signUpForm.get('billing_country').hasError(validation.type) && (signUpForm.get('billing_country').dirty || signUpForm.get('billing_country').touched)">
+                        <ion-icon name="information-circle-outline"></ion-icon>
+                        <span class="error-text">{{ validation.message }}</span>
+                      </div>
+                    </ng-container>
+                  </div>
+                </ion-col>
+              </ion-row>
+  
+              <ion-grid class="underlined">  
+                <ion-row class="ion-no-padding ion-align-items-center">
+                  <ion-col size="1" class="ion-no-padding">
+                    <img class="input-icon" src="../../../assets/images/earth.png" alt="icon">
+                  </ion-col>
+                  <ion-col size="11" class="ion-no-padding">
+                    <ion-select placeholder="Select State" class="input-sm" justify="space-between" required
+                      id="billing_state" formControlName="billing_state" toggleIcon="caret-down-circle-outline"
+                      expandedIcon="remove" aria-label="Select Billing State" (ionChange)="loadAllCities($event)">
+                      <ion-select-option *ngFor="let state of allStates"
+                        value="{{state.name}}">{{state.name}}</ion-select-option>
+                    </ion-select>
+                  </ion-col>
+                </ion-row>
+              </ion-grid>
+
+              <ion-row class="ion-padding-bottom">
+                <ion-col size="12" class="ion-no-padding">
+                  <div class="error-container">
+                    <ng-container *ngFor="let validation of validation_messages.billing_state">
+                      <div class="error-message"
+                        *ngIf="signUpForm.get('billing_state').hasError(validation.type) && (signUpForm.get('billing_state').dirty || signUpForm.get('billing_state').touched)">
+                        <ion-icon name="information-circle-outline"></ion-icon>
+                        <span class="error-text">{{ validation.message }}</span>
+                      </div>
+                    </ng-container>
+                  </div>
+                </ion-col>
+              </ion-row>
+  
+              <ion-grid class="underlined">
+                <ion-row class="ion-no-padding ion-align-items-center">
+                  <ion-col size="1" class="ion-no-padding">
+                    <img class="input-icon" src="../../../assets/images/earth.png" alt="icon">
+                  </ion-col>
+                  <ion-col size="11" class="ion-no-padding">
+                    <ion-select placeholder="Select City" class="input-sm" justify="space-between" required
+                      id="billing_city" formControlName="billing_city" toggleIcon="caret-down-circle-outline"
+                      expandedIcon="remove" aria-label="Select Billing City" (ionChange)="runTimeChange($event)">
+                      <ion-select-option *ngFor="let city of allCities"
+                        value="{{city.name}}">{{city.name}}</ion-select-option>
+                    </ion-select>
+                  </ion-col>
+                </ion-row>
+              </ion-grid>
+
+              <ion-row class="ion-padding-bottom">
+                <ion-col size="12" class="ion-no-padding">
+                  <div class="error-container">
+                    <ng-container *ngFor="let validation of validation_messages.billing_city">
+                      <div class="error-message"
+                        *ngIf="signUpForm.get('billing_city').hasError(validation.type) && (signUpForm.get('billing_city').dirty || signUpForm.get('billing_city').touched)">
+                        <ion-icon name="information-circle-outline"></ion-icon>
+                        <span class="error-text">{{ validation.message }}</span>
+                      </div>
+                    </ng-container>
+                  </div>
+                </ion-col>
+              </ion-row>
+  
+              <ion-grid class="underlined">
+                <ion-row class="ion-no-padding ion-align-items-center">
+                  <ion-col size="1" class="ion-no-padding">
+                    <img class="input-icon" src="../../../assets/images/earth.png" alt="icon">
+                  </ion-col>
+                  <ion-col size="11" class="ion-no-padding">
+                    <ion-input required type="text" placeholder="Enter Post or ZIP Code"
+                      formControlName="billing_postcode" id="billing_postcode"
+                      (ionChange)="runTimeChange($event)"></ion-input>
+                  </ion-col>
+                </ion-row>
+              </ion-grid>
+
+              <ion-row class="ion-padding-bottom">
+                <ion-col size="12" class="ion-no-padding">
+                  <div class="error-container">
+                    <ng-container *ngFor="let validation of validation_messages.billing_postcode">
+                      <div class="error-message"
+                        *ngIf="signUpForm.get('billing_postcode').hasError(validation.type) && (signUpForm.get('billing_postcode').dirty || signUpForm.get('billing_postcode').touched)">
+                        <ion-icon name="information-circle-outline"></ion-icon>
+                        <span class="error-text">{{ validation.message }}</span>
+                      </div>
+                    </ng-container>
+                  </div>
+                </ion-col>
+              </ion-row>
+  
+              <ion-grid class="underlined">  
+                <ion-row class="ion-no-padding ion-align-items-center">
+                  <ion-col size="1" class="ion-no-padding">
+                    <img class="input-icon" src="../../../assets/images/earth.png" alt="icon">
+                  </ion-col>
+                  <ion-col size="11" class="ion-no-padding">
+                    <ion-input required type="text" placeholder="Enter Phone Number" formControlName="billing_phone"
+                      id="billing_phone" (ionChange)="runTimeChange($event)"></ion-input>
+                  </ion-col>
+                </ion-row>
+              </ion-grid>
+
+              <ion-row class="ion-padding-bottom">
+                <ion-col size="12" class="ion-no-padding">
+                  <div class="error-container">
+                    <ng-container *ngFor="let validation of validation_messages.billing_phone">
+                      <div class="error-message"
+                        *ngIf="signUpForm.get('billing_phone').hasError(validation.type) && (signUpForm.get('billing_phone').dirty || signUpForm.get('billing_phone').touched)">
+                        <ion-icon name="information-circle-outline"></ion-icon>
+                        <span class="error-text">{{ validation.message }}</span>
+                      </div>
+                    </ng-container>
+                  </div>
+                </ion-col>
+              </ion-row>
+  
+              <ion-grid>
+                <ion-row>
+                  <ion-col size="12" class="ion-text-center">
+                    <ion-button fill="solid" class="wpc-button-sm-green ion-text-uppercase"
+                      (click)="Switchto('review')" expand = "full">Review</ion-button>
+                  </ion-col>
+                  <ion-col size="12" class="ion-text-center">
+                    <ion-button fill="solid" class="wpc-button-sm-blue ion-text-uppercase"
+                      (click)="Returnto('email')" expand = "full" color = "secondary">Return</ion-button>
+                  </ion-col>
+                  <ion-col size="12" class="ion-text-center">
+                    <ion-button fill="solid" class="wpc-button-sm-red ion-text-uppercase"
+                      (click)="returnToLogin()" expand = "full" color = "tertiary">Cancel</ion-button>
+                  </ion-col>
+                </ion-row>
+              </ion-grid>
+            </ng-template>
+  
+            <!-- Review Details and submit -->
+            <ng-template [ngSwitchCase]="'review'">
+              <ion-grid class="grid-with-background ion-no-padding">
+                <ion-row class="row-with-background ion-align-items-center">
+                  <ion-col size="12">
+                    <h3 class="white ion-text-uppercase" color = "primary">Personal Details</h3>
+                  </ion-col>
+                </ion-row>
+                <ion-row *ngFor="let field of fieldobj | keyvalue">
+                  <ion-col size="12" class="ion-text-left padded-row"
+                    *ngIf="field.key == 'first_name' || field.key == 'last_name' || field.key == 'email' || field.key == 'password'">
+                    <div class="2-column-data">
+                      <p class="label-sm-bold-indented ion-text-uppercase" position="stacked">{{field.value.name}} : {{field.value.value}} </p>
+                    </div>
+                  </ion-col>
+                </ion-row>
+              </ion-grid>
+  
+              <ion-grid class="grid-with-background ion-no-padding">
+                <ion-row class="row-with-background ion-align-items-center">
+                  <ion-col size="12">
+                    <h3 class="white ion-text-uppercase" color = "primary">Billing and Address Details</h3>
+                  </ion-col>
+                </ion-row>
+                <ion-row *ngFor="let fill of fieldobj | keyvalue">
+                  <ion-col size="12" class="ion-text-left padded-row"
+                    *ngIf="fill.key == 'billing_address_1' || fill.key == 'billing_address_2' || fill.key == 'billing_city' || fill.key == 'billing_state' || fill.key == 'billing_country' || fill.key == 'billing_postcode' || fill.key == 'billing_phone'">
+                    <div class="2-column-data">
+                      <p class="label-sm-bold-indented ion-text-uppercase" position="stacked">{{fill.value.name}} : {{fill.value.value}}</p>
+                    </div>
+                  </ion-col>
+                </ion-row>
+              </ion-grid>
+  
+              <ion-grid>
+                <ion-row>
+                  <ion-col size="12" class="ion-text-center">
+                    <ion-button fill="solid" class="wpc-button-sm-green ion-text-uppercase"
+                      type="submit" expand = "full" color = "primary">Submit</ion-button>
+                  </ion-col>
+                  <ion-col size="12" class="ion-text-center">
+                    <ion-button fill="solid" class="wpc-button-sm-blue ion-text-uppercase"
+                      (click)="Switchto('personal')" expand = "full" color = "secondary">Return</ion-button>
+                  </ion-col>
+                  <ion-col size="12" class="ion-text-center">
+                    <ion-button fill="solid" class="wpc-button-sm-red ion-text-uppercase"
+                      (click)="returnToLogin()" expand = "full" color = "tertiary">Cancel</ion-button>
+                  </ion-col>
+                </ion-row>
+              </ion-grid>
+            </ng-template>
+          </div>
+        </form>
+      </section>
+    </div>
+
+  </div>
+</ion-content>

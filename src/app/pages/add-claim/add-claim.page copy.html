@@ -1,0 +1,203 @@
+<ion-header [translucent]="true">
+  <ion-toolbar color="clear">
+    <ion-buttons slot="secondary" style="width:100%;">
+      <ion-button routerLink="/home/accounts">
+        <img class="logout" src="../../../assets/images/logout.png" alt="Site Logo">
+      </ion-button>
+      <ion-button (click)="goToShipments()">
+        <img class="logout" src="../../../assets/images/arrow-left.png" alt="back Logo">
+      </ion-button>
+      <ion-title>
+        <h5 class="white ion-text-uppercase ion-text-left">File a Claim</h5>
+      </ion-title>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-margin">
+  <ion-text color="clear">
+    <h1 class="ion-text-start title ion-margin">SUPPORT DESK</h1>
+  </ion-text>
+
+  <ion-text color="clear">
+    <h3 class="ion-text-start title ion-margin">Claims</h3>
+  </ion-text>
+
+  <section class="main-data">
+    <ion-grid class="backgrounded">
+      <div class="header-back">
+        <ion-text color="primary">
+          <h4 class="ion-no-margin">Add Entry Here</h4>
+        </ion-text>
+      </div>
+
+      <form class="ion-margin" [formGroup]="addTicketForm">
+        <ion-row>
+          <ion-col size="12">
+            <ion-label position="floating">Date of Claim<span class="error-text">*</span></ion-label>
+          </ion-col>
+          <ion-col size="12">
+            <ion-input class="input-sm" formControlName="claim_date" type="date" required> </ion-input>
+          </ion-col>
+          <div class="error-container">
+            <ng-container *ngFor="let validation of validation_messages.claim_date">
+              <div class="error-message"
+                *ngIf="addTicketForm.get('claim_date')?.hasError(validation.type) && (addTicketForm.get('claim_date')?.dirty || addTicketForm.get('claim_date')?.touched)">
+                <ion-icon name="information-circle-outline"></ion-icon>
+                <span class="error-text">{{ validation.message }}</span>
+              </div>
+            </ng-container>
+          </div>
+        </ion-row>
+
+        <ion-row>
+          <ion-col size="12">
+            <ion-label position="floating">Type of Claim</ion-label>
+          </ion-col>
+          <ion-col size="12">
+            <ion-select (ionChange)="typeClaimChange($event)" placeholder="Select Claim Type" class="input-sm"
+              interface="popover" justify="space-between" required toggleIcon="add" expandedIcon="remove"
+              aria-label="Select Claim Type">
+              <ion-select-option value="lost">Lost</ion-select-option>
+              <ion-select-option value="damage">Damage</ion-select-option>
+            </ion-select>
+          </ion-col>
+        </ion-row>
+
+        <ion-row>
+          <ion-col size="12">
+            <ion-label position="floating">Warehouse<span class="error-text">*</span></ion-label>
+          </ion-col>
+          <ion-col size="12">
+            <ion-select (ionChange)="warehouseChange($event)" placeholder="Select Warehouse" class="input-sm"
+              interface="popover" justify="space-between" required toggleIcon="add" expandedIcon="remove"
+              aria-label="Select Warehouse">
+              <ion-select-option value="2">Japan</ion-select-option>
+              <!-- <ion-select-option value="3">US</ion-select-option> -->
+            </ion-select>
+          </ion-col>
+        </ion-row>
+
+        <ion-row>
+          <ion-col size="12">
+            <ion-label position="floating">Item Value<span class="error-text">*</span></ion-label>
+          </ion-col>
+          <ion-col size="12">
+            <ion-input class="input-sm" formControlName="claims_item_value" type="text" required value=""> </ion-input>
+          </ion-col>
+          <div class="error-container">
+            <ng-container *ngFor="let validation of validation_messages.claims_item_value">
+              <div class="error-message"
+                *ngIf="addTicketForm.get('claims_item_value')?.hasError(validation.type) && (addTicketForm.get('claims_item_value')?.dirty || addTicketForm.get('claims_item_value')?.touched)">
+                <ion-icon name="information-circle-outline"></ion-icon>
+                <span class="error-text">{{ validation.message }}</span>
+              </div>
+            </ng-container>
+          </div>
+        </ion-row>
+
+        <ion-row>
+          <ion-col size="12">
+            <ion-label position="floating">Invoice ID Number<span class="error-text">*</span></ion-label>
+          </ion-col>
+          <ion-col size="12">
+            <ion-input class="input-sm" formControlName="claims_invoice" type="text" required value=""> </ion-input>
+          </ion-col>
+          <div class="error-container">
+            <ng-container *ngFor="let validation of validation_messages.claims_invoice">
+              <div class="error-message"
+                *ngIf="addTicketForm.get('claims_invoice')?.hasError(validation.type) && (addTicketForm.get('claims_invoice')?.dirty || addTicketForm.get('claims_invoice')?.touched)">
+                <ion-icon name="information-circle-outline"></ion-icon>
+                <span class="error-text">{{ validation.message }}</span>
+              </div>
+            </ng-container>
+          </div>
+        </ion-row>
+
+        <ion-row>
+          <ion-col size="12">
+            <ion-label position="floating">Parcel ID to Claim<span class="error-text">*</span></ion-label>
+          </ion-col>
+          <ion-col size="12">
+            <ion-input class="input-sm" formControlName="claims_tracking" type="text" required value=""> </ion-input>
+          </ion-col>
+          <div class="error-container">
+            <ng-container *ngFor="let validation of validation_messages.claims_tracking">
+              <div class="error-message"
+                *ngIf="addTicketForm.get('claims_tracking')?.hasError(validation.type) && (addTicketForm.get('claims_tracking')?.dirty || addTicketForm.get('claims_tracking')?.touched)">
+                <ion-icon name="information-circle-outline"></ion-icon>
+                <span class="error-text">{{ validation.message }}</span>
+              </div>
+            </ng-container>
+          </div>
+        </ion-row>
+
+        <ion-row>
+          <ion-col size="12">
+            <ion-label position="floating">Description<span class="error-text">*</span></ion-label>
+          </ion-col>
+          <ion-col size="12">
+            <ion-textarea formControlName="claims_description" required class="input-sm-textarea"
+              placeholder="Add your comment here"> </ion-textarea>
+          </ion-col>
+          <div class="error-container">
+            <ng-container *ngFor="let validation of validation_messages.claims_description">
+              <div class="error-message"
+                *ngIf="addTicketForm.get('claims_description')?.hasError(validation.type) && (addTicketForm.get('claims_description')?.dirty || addTicketForm.get('claims_description')?.touched)">
+                <ion-icon name="information-circle-outline"></ion-icon>
+                <span class="error-text">{{ validation.message }}</span>
+              </div>
+            </ng-container>
+          </div>
+        </ion-row>
+
+        <ion-row>
+          <ion-col size="12" class="ion-text-center bordered">
+            <div class="img-input-container">
+              <img src="../../../assets/images/cloud-computing.png" (click)="pickFile()" />
+            </div>
+            <ion-text class="ion-text-center">Upload your files here</ion-text>
+          </ion-col>
+        </ion-row>
+
+        <ion-row>
+          @for (file of files; track file) {
+          <ion-col size="12">
+            <ion-input label="Name" type="text" readonly [value]="file.name"></ion-input>
+          </ion-col>
+          <ion-col size="12" class="hidden">
+            <ion-input label="Path" type="hidden" readonly [value]="file.path"></ion-input>
+          </ion-col>
+          <ion-col size="12">
+            <ion-input label="Mime Type" type="text" readonly [value]="file.mimeType"></ion-input>
+          </ion-col>
+          <ion-col size="12" class="hidden">
+            <ion-input label="Size" type="hidden" readonly [value]="file.size"></ion-input>
+          </ion-col>
+          <ion-col size="12" class="hidden">
+            <ion-input label="Data" type="hidden" readonly [value]="file.data"></ion-input>
+          </ion-col>
+          <ion-col size="12" class="hidden">
+            <ion-input label="Duration" type="hidden" readonly [value]="file.duration"></ion-input>
+          </ion-col>
+          <ion-col size="12" class="hidden">
+            <ion-input label="Height" type="hidden" readonly [value]="file.height"></ion-input>
+          </ion-col>
+          <ion-col size="12" class="hidden">
+            <ion-input label="Width" type="hidden" readonly [value]="file.width"></ion-input>
+          </ion-col>
+          @if (file.path) {
+          <img [src]="file.path | fileSource" />
+          }
+          }
+        </ion-row>
+
+        <ion-row class="ion-text-right ion-padding">
+          <ion-col size="12">
+            <ion-button class="button-sm" type="submit" (click)="submitaddTicket()">Submit</ion-button>
+          </ion-col>
+        </ion-row>
+      </form>
+    </ion-grid>
+  </section>
+</ion-content>

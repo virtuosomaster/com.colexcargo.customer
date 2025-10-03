@@ -1,0 +1,173 @@
+<ion-header [translucent]="true">
+  <ion-toolbar color="clear">
+    <ion-buttons slot="secondary" style = "width:100%;">
+      <ion-menu-button></ion-menu-button>
+      <ion-searchbar
+      class = "custom-search"
+      debounce="500" 
+      search-icon="search-circle"
+      color="light"
+      (search)="onSearchShipment()" 
+      (ionClear)="onClear()"
+      (ionInput)="onInput( )"
+      placeholder="Search Claim" 
+      showCancelButton="never" 
+      clearIcon="trash-bin" 
+      [(ngModel)]="search"
+      ></ion-searchbar>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-margin">
+  <div id="content-inner">
+
+  <ion-text color="clear">
+    <h1 class="dark-blue ion-text-start title ion-margin">SUPPORT DESK</h1>
+</ion-text>
+
+  <ion-fab horizontal="end" vertical="bottom" slot="fixed">
+    <ion-fab-button [routerLink]="['/home/add-claim']">
+      <ion-icon name="add"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+
+  <section class = "main-data">
+    <ion-grid>
+      <ion-row>
+        <ion-col size="6" class="ion-text-center"><ion-button class="wpc-button-sm-blue ion-text-uppercase"
+            shape="default" routerLink="/home/support-desk">Support Desk</ion-button></ion-col>
+        <ion-col size="6" class="ion-text-center"><ion-button class="wpc-button-sm-green ion-text-uppercase"
+            shape="default" routerLink="/home/claims">Claims</ion-button></ion-col>
+
+      </ion-row>
+    </ion-grid>
+    
+    <ion-grid>
+      <!-- Flags -->
+      <div class="ion-text-center ion-margin-vertical" *ngIf="searchingFlag">
+        <ion-text color="warning">
+          <ion-spinner class="icon-vcenter" color="warning" name="crescent" ></ion-spinner>
+          Seaching Claims...
+        </ion-text>
+      </div>
+      <div class="error-message ion-text-center ion-margin-bottom" *ngIf="errorMessage">
+        <ion-text>
+          <ion-icon name="alert" class="icon-vcenter"></ion-icon> 
+          {{errorMessage}}
+        </ion-text>
+      </div>
+    </ion-grid>
+
+    <ion-grid>
+      <ion-list>
+        <ion-item *ngFor="let ticket of searchedList" padding (click)="viewDetails( ticket.ID )">
+          <ion-grid class ="parcel-rows grid-with-background ion-no-padding md hydrated">
+            
+   
+
+            
+            <ion-row class="row-with-background ion-align-items-center">
+              <ion-col size="8">
+                <h5 class="white ion-text-uppercase">{{ticket.name}}</h5>
+              </ion-col>
+           
+                <ion-col size="4" class="ion-text-center">               
+                  <ion-button *ngIf = "ticket.status !== 'closed'" class = "ion-no-margin button-sm ion-text-uppercase" fill="solid" shape="round" color="success">{{ticket.status}}</ion-button>
+                  <ion-button *ngIf = "ticket.status === 'closed'" class = "ion-no-margin button-sm ion-text-uppercase" fill="solid" shape="round" color="primary">{{ticket.status}}</ion-button>
+             
+              </ion-col>
+            </ion-row>
+
+    
+            <ion-row class = "centered">
+              <ion-col class = "sixty">
+                <ion-text class="ion-text-start">
+                  <h5 class="ion-text-start ion-no-margin shipment-title">{{ticket.name}}</h5>
+                </ion-text>
+                
+                <div class="ion-text-start ion-no-margin custom-div">
+                  <ion-text class="ion-text-start ion-text-uppercase">
+                    <span class="label">Category: </span>
+                    <span class="data">{{ticket.type}}</span>
+                  </ion-text>
+                  <ion-text class="ion-text-start ion-text-uppercase">
+                    <span class="label">Warehouse: </span>
+                    <span class="data">{{ticket.warehouse_name}}</span>
+                  </ion-text>
+                </div>
+              </ion-col>
+    
+              <ion-col class = "forty">
+                <span class = "ion-text-right shipment-date ion-no-margin">{{ticket.date_created | date: 'MMM dd yyyy' }}</span>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+        </ion-item>
+      </ion-list>
+    </ion-grid>
+
+    <ion-grid *ngIf="!searchingFlag && !searchedList ">
+      <ion-list>
+        <ion-item *ngFor="let ticket of claims" padding (click)="viewDetails( ticket.ID )">
+          <ion-grid class ="parcel-rows grid-with-background ion-no-padding md hydrated">
+            
+   
+
+            
+            <ion-row class="row-with-background ion-align-items-center">
+              <ion-col size="8">
+                <h5 class="white ion-text-uppercase">{{ticket.name}}</h5>
+              </ion-col>
+           
+                <ion-col size="4" class="ion-text-center">               
+                  <ion-button *ngIf = "ticket.status !== 'closed'" class = "ion-no-margin button-sm ion-text-uppercase" fill="solid" shape="round" color="success">{{ticket.status}}</ion-button>
+                  <ion-button *ngIf = "ticket.status === 'closed'" class = "ion-no-margin button-sm ion-text-uppercase" fill="solid" shape="round" color="primary">{{ticket.status}}</ion-button>
+             
+              </ion-col>
+            </ion-row>
+
+
+            <ion-row class="ion-align-items-start padded-row md hydrated">
+              <ion-col size="7">
+                <p class="text-large ion-text-uppercase">{{ticket.client_id}}</p>
+              </ion-col>
+              <ion-col size="5" class="ion-text-right">
+                <p class="text-large">{{ticket.date_created | date: 'MMM dd yyyy' }}</p>
+              </ion-col>
+            </ion-row>
+  
+
+    
+            <ion-row class = "centered">
+              <ion-col class = "sixty">
+                
+                
+                <div class="ion-text-start ion-no-margin custom-div">
+                  <ion-text class="ion-text-start ion-text-uppercase">
+                    <span class="label">Category: </span>
+                    <span class="data">{{ticket.type}} </span>
+                  </ion-text>
+                  <ion-text class="ion-text-start ion-text-uppercase">
+                    <span class="label">Warehouse: </span>
+                    <span class="data">{{ticket.warehouse_name}}</span>
+                  </ion-text>
+                </div>
+              </ion-col>
+    
+             
+            </ion-row>
+          </ion-grid>
+        </ion-item>
+      </ion-list>
+    </ion-grid>
+
+    <ion-infinite-scroll threshold="100px" (ionInfinite)="loadData($event)" class="ion-padding-top" *ngIf="!searchingFlag && !searchedList">
+      <ion-infinite-scroll-content
+        loadingSpinner="crescent" 
+        loadingText="Loading more tickets">
+      </ion-infinite-scroll-content>
+    </ion-infinite-scroll>
+  </section>
+  </div>
+</ion-content>

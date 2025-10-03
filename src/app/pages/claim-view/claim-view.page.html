@@ -1,0 +1,230 @@
+<ion-header [translucent]="true" id="dark_backgrounded" class="ion-no-border">
+  <ion-toolbar color="clear">
+    <ion-buttons slot="secondary" style="width:100%;">
+      <ion-menu-button color="primary"></ion-menu-button>
+      <ion-button (click)="goToShipments()">
+        <ion-icon name="arrow-undo-circle-outline" color="primary"></ion-icon>
+      </ion-button>
+      <ion-title color="primary"><img id="app-logo" src="../../assets/images/logo.png" alt="Site Logo"
+          height="35px"></ion-title>
+      <!-- <ion-searchbar class="custom-search" debounce="500" color="light" (search)="onSearchShipment()"
+        (ionClear)="onClear()" (ionInput)="onInput( )" placeholder="Search Ticket" showCancelButton="never"
+        [(ngModel)]="search"></ion-searchbar> -->
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-margin ion-padding">
+  <div id="content-inner">
+    <ion-grid class="ion-no-padding" *ngIf="processFlag == false">
+      <ion-row class="ion-align-items-center">
+        <ion-col size="12">
+          <!-- <p class="text-label-small ion-text-uppercase">Ticket Number</p> -->
+          <h5 class="white ion-text-uppercase">{{ticketData.name}}</h5>
+        </ion-col>
+        <ion-col size="12">
+          <p class="text-label-small">Author: {{ticketData.author_name}}</p>
+          <p class="text-label-small">{{ticketData.date_created | date: 'MMM dd, yyyy'}}</p>
+          <p class="text-label-small" *ngIf="ticketData.wpc_tickets_history">Last Updated by
+            {{lastUpdate['updated-name']}}
+            on
+            {{lastUpdate.date | date: 'MMM dd yyyy'}}</p>
+        </ion-col>
+        <!-- <ion-col size="2" class="ion-text-right">
+          <ion-col size="4" class="ion-text-center"><ion-button class="wpc-button-sm-light ion-text-uppercase"
+              shape="default" size="small">{{ticketData.status}}</ion-button></ion-col>
+        </ion-col> -->
+      </ion-row>
+      <ion-row class="ion-align-items-start ion-padding">
+        <ion-col size="6">
+          <p class="text-label-small">Status</p>
+          <p class="text-large ion-text-uppercase">{{ticketData.status}}</p>
+        </ion-col>
+
+        <ion-col size="6">
+          <p class="text-label-small">Declared Value</p>
+          <p class="text-large">{{ticketData.claims_item_value}}</p>
+        </ion-col>
+
+        <ion-col size="6">
+          <p class="text-label-small">Ticket of Claim</p>
+          <p class="text-large">{{ticketData.type}}</p>
+        </ion-col>
+
+        <ion-col size="6">
+          <p class="text-label-small">Shipment No.</p>
+          <p class="text-large">{{ticketData.tracking_number}}</p>
+        </ion-col>
+
+        <ion-col size="6">
+          <p class="text-label-small">Invoice No.</p>
+          <p class="text-large">{{ticketData.claims_invoice}}</p>
+        </ion-col>
+
+        <ion-col size="12">
+          <p class="text-label-small">Message</p>
+          <p class="text-large">{{ticketData.support_content}}</p>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+
+    <ion-grid class="ion-no-padding" *ngIf="processFlag == false">
+      <ion-row class="row-with-background ion-align-items-center">
+        <ion-col size="8">
+          <h5 class="white ion-text-uppercase ion-text-left">ATTACHMENTS</h5>
+        </ion-col>
+      </ion-row>
+      <ion-row class="ion-align-items-start padded-row">
+        <!-- *ngIf="shipmentData.details.length > 0" -->
+        <ion-col size="4" *ngFor="let image of file_data">
+          <div class="img-container">
+            <div class="file-indicator">
+              <img src="../../../assets/images/picture.png" class="account-icons"
+                *ngIf="image.mime_type.includes('image')" />
+              <img src="../../../assets/images/sheet.png" class="account-icons"
+                *ngIf="image.mime_type ==='application/pdf'" />
+              <img src="../../../assets/images/documents.png" class="account-icons" *ngIf="image.mime_type ===''" />
+              <img src="../../../assets/images/documents.png" class="account-icons"
+                *ngIf="image.mime_type ==='text/csv'" />
+            </div>
+            <img *ngIf="image.thumbnail" src="{{image.thumbnail}}" (click)="openCapacitorSite(image.url)" />
+            <img *ngIf="!image.thumbnail" src="../../../assets/images/document.png"
+              (click)="openCapacitorSite(image.url)" />
+          </div>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+
+    <ion-grid class="ion-no-padding" *ngIf="processFlag == false">
+      <ion-row class="row-with-background ion-align-items-center">
+        <ion-col size="12">
+          <h5 class="white ion-text-uppercase ion-text-left">RESPONSES</h5>
+        </ion-col>
+      </ion-row>
+      <ion-row *ngIf="ticketData.replies === 0">
+        <ion-col size="12">
+          <h4 class="ion-no-margin">There is no response to your ticket yet.</h4>
+        </ion-col>
+      </ion-row>
+      <ion-row *ngFor="let comment of ticketData.comments" class="comment_container">
+        <ion-col size="12">
+          <div class="comment-content" (click)="viewComment(comment.id)">
+            <p class="display-text-flex ion-text-left padded-row">
+              <span class="label-text label-sm-bold ninety">{{comment.user_name}}</span><span
+                class="text-small">{{comment.date | date:
+                'MMM dd yyyy HH:mm'}}</span><span><ion-icon [name]="viewCommentIcon"
+                  color="secondary"></ion-icon></span>
+            </p>
+            <p class="display-text ion-padding" *ngIf="showComment == true && showCommentID == comment.id"><span
+                class="label-text">{{comment.comment_content}}</span></p>
+            <ion-grid *ngIf="showComment == true && showCommentID == comment.id">
+              <ion-row>
+                <ion-col *ngFor="let image of comment['ticket_images']" size="3">
+                  <div class="img-container">
+                    <div class="file-indicator">
+                      <img src="../../../assets/images/picture.png" class="account-icons"
+                        *ngIf="image.mime_type.includes('image')" />
+                      <img src="../../../assets/images/sheet.png" class="account-icons"
+                        *ngIf="image.mime_type ==='application/pdf'" />
+                      <img src="../../../assets/images/documents.png" class="account-icons"
+                        *ngIf="image.mime_type ===''" />
+                      <img src="../../../assets/images/documents.png" class="account-icons"
+                        *ngIf="image.mime_type ==='text/csv'" />
+                    </div>
+                    <img *ngIf="image.thumbnail" src="{{image.thumbnail}}" (click)="openCapacitorSite(image.url)" />
+                    <img *ngIf="!image.thumbnail" src="../../../assets/images/document.png"
+                      (click)="openCapacitorSite(image.url)" />
+                  </div>
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+          </div>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+
+    <ion-grid>
+      <ion-row>
+        <ion-col size="12" class="ion-text-center">
+          <ion-button class="ion-text-uppercase" expand="full" size="small"
+            (click)="viewTicketDetails()">{{viewDetails}}</ion-button>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+    <!-- Add new response -->
+    <ion-grid class="ion-no-padding" *ngIf="processFlag == false && canUpdate == true && showDetails == true">
+      <ion-row>
+        <ion-col size="12" class="ion-padding">
+          <form class="ion-no-margin" [formGroup]="updateTicketForm">
+            <ion-grid class="underlined">
+              <ion-row class="ion-no-padding ion-align-items-center">
+                <ion-col size="12" class="ion-no-padding">
+                  <ion-textarea id="ticket_comment_reply" formControlName="ticket_comment_reply" required
+                    class="input-sm-textarea outlined" placeholder="Add your comment here"> </ion-textarea>
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+            <div class="error-container">
+              <ng-container *ngFor="let validation of validation_messages.ticket_comment_reply">
+                <div class="error-message"
+                  *ngIf="updateTicketForm.get('ticket_comment_reply').hasError(validation.type) && (updateTicketForm.get('ticket_comment_reply').dirty || updateTicketForm.get('ticket_comment_reply').touched)">
+                  <ion-icon name="information-circle-outline"></ion-icon>
+                  <span class="error-text">{{ validation.message }}</span>
+                </div>
+              </ng-container>
+            </div>
+
+            <ion-row *ngIf="canUpload==true">
+              <ion-col size="12" class="ion-text-center">
+                <div class="img-input-container" (click)="pickFile()">
+                  <img class="upload-button" src="../../../assets/images/arrow.png" />
+                  <ion-text class="ion-text-center">Upload your files here</ion-text>
+                </div>
+              </ion-col>
+            </ion-row>
+
+            <ion-row>
+              @for (file of files; track file) {
+              <ion-col size="12">
+                <ion-input label="Name" type="text" readonly [value]="file.name"></ion-input>
+              </ion-col>
+              <ion-col size="12" class="hidden">
+                <ion-input label="Path" type="hidden" readonly [value]="file.path"></ion-input>
+              </ion-col>
+              <ion-col size="12">
+                <ion-input label="Mime Type" type="text" readonly [value]="file.mimeType"></ion-input>
+              </ion-col>
+              <ion-col size="12" class="hidden">
+                <ion-input label="Size" type="hidden" readonly [value]="file.size"></ion-input>
+              </ion-col>
+              <ion-col size="12" class="hidden">
+                <ion-input label="Data" type="hidden" readonly [value]="file.data"></ion-input>
+              </ion-col>
+              <ion-col size="12" class="hidden">
+                <ion-input label="Duration" type="hidden" readonly [value]="file.duration"></ion-input>
+              </ion-col>
+              <ion-col size="12" class="hidden">
+                <ion-input label="Height" type="hidden" readonly [value]="file.height"></ion-input>
+              </ion-col>
+              <ion-col size="12" class="hidden">
+                <ion-input label="Width" type="hidden" readonly [value]="file.width"></ion-input>
+              </ion-col>
+              @if (file.path) {
+              <img [src]="file.path | fileSource" />
+              }
+              }
+            </ion-row>
+
+            <ion-row>
+              <ion-col class="ion-text-right ion-margin-top">
+                <ion-button class="ion-text-uppercase" size="small" expand="full" color="primary" type="submit"
+                  (click)="submitupdateTicket()">Send
+                  Reply</ion-button>
+              </ion-col>
+            </ion-row>
+          </form>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </div>
+</ion-content>

@@ -1,0 +1,210 @@
+<ion-header [translucent]="true" id="dark_backgrounded" class="ion-no-border">
+  <ion-toolbar color="clear">
+    <ion-buttons slot="secondary" style="width:100%;">
+      <ion-menu-button color="primary"></ion-menu-button>
+      <!-- <ion-button (click)="goToShipments()">
+        <ion-icon name="arrow-undo-circle-outline" color="primary"></ion-icon>
+      </ion-button> -->
+      <ion-title color="primary"><img id="app-logo" class="inner-page" src="../../assets/images/logo.png" alt="Site Logo"
+          height="35px"></ion-title>
+      <!-- <ion-searchbar class="custom-search" debounce="500" color="light" (search)="onSearchShipment()"
+        (ionClear)="onClear()" (ionInput)="onInput( )" placeholder="Search Ticket" showCancelButton="never"
+        [(ngModel)]="search"></ion-searchbar> -->
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-margin ion-padding">
+  <div id="content-inner">
+    <ion-fab horizontal="end" vertical="bottom" slot="fixed" color="secondary"
+      *ngIf="canSubmit == true || supportEnabled == true">
+      <ion-fab-button [routerLink]="['/home/add-ticket']" color="secondary">
+        <ion-icon name="add-circle-outline"></ion-icon>
+      </ion-fab-button>
+    </ion-fab>
+    <!-- Navigation tabs -->
+    <ion-grid>
+      <ion-row>
+        <ion-col size="6" class="ion-text-center tab-nav tab-active" routerLink="/home/support-desk">
+          <div class="tab-content-img">
+            <img class="item-no-filter" src="../../../assets/images/support.png" alt="Item icon">
+            <h3 class="white ion-text-uppercase">Tickets</h3>
+          </div>
+        </ion-col>
+        <ion-col size="6" class="ion-text-center tab-nav" routerLink="/home/claims">
+          <div class="tab-content-img">
+            <img class="item-no-filter" src="../../../assets/images/claim.png" alt="Item icon">
+            <h3 class="white ion-text-uppercase">Claims</h3>
+          </div>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+
+    <div>
+      <!-- <div class="greetings">
+        <ion-text color="primary">
+          <h1 class="dark-blue ion-text-start title ion-margin">Search Ticket</h1>
+        </ion-text>
+        <ion-icon name="cube-outline" color="warning"></ion-icon>
+      </div> -->
+      <ion-searchbar class="custom-search" debounce="500" color="light" (search)="onSearchShipment()"
+        (ionClear)="onClear()" (ionInput)="onInput( )" placeholder="Search Ticket" showCancelButton="never"
+        [(ngModel)]="search"></ion-searchbar>
+    </div>
+    <ion-grid class="grid-with-background shadowed ion-no-padding" *ngIf="supportEnabled == false">
+      <ion-row class="ion-no-padding">
+        <ion-col size="12" class="ion-no-padding ion-align-items-center">
+          <ion-grid class="ion-no-padding">
+            <ion-row class="row-with-background ion-align-items-center ion-justify-content-center ion-padding">
+              <ion-col size="12" class="ion-text-center">
+                <img class="home" src="../../../assets/images/support-ticket.png" alt="Item icon">
+              </ion-col>
+              <ion-col size="12" class="ion-text-center">
+                <h3 class="white ion-text-uppercase">You do not have permission to ACCESS this Module.</h3>
+              </ion-col>
+              <ion-col size="12" class="ion-text-center">
+                <ion-button class="wpc-button-sm-red" type="submit"
+                  (click)="openCapacitorSite('https://colexcargo.com/')">CONTACT SUPPORT</ion-button>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+
+    <!-- <ion-grid class="grid-with-background shadowed ion-no-padding" *ngIf="!tickets">
+      <ion-row class="ion-no-padding">
+        <ion-col size="12" class="ion-no-padding ion-align-items-center">
+          <ion-grid class="ion-no-padding">
+            <ion-row class="row-with-background ion-align-items-center ion-justify-content-center ion-padding">
+              <ion-col size="12" class="ion-text-center">
+                <img class="home" src="../../../assets/images/support-ticket.png" alt="Item icon">
+              </ion-col>
+              <ion-col size="12" class="ion-text-center">
+                <h3 class="white ion-text-uppercase">You have no tickets yet.</h3>
+              </ion-col>
+              <ion-col size="12" class="ion-text-center">
+                <h3 class="white ion-text-uppercase">Add new to get started.</h3>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+        </ion-col>
+      </ion-row>
+    </ion-grid> -->
+
+    <section *ngIf="searchedList">
+      <!-- <ion-grid *ngFor="let ticket of searchedList" class="ion-no-padding grid-with-background"
+
+        (click)="viewDetails( ticket.ID )">
+        <ion-row class="ion-no-padding shadowed">
+          <ion-col size="3"
+            class="ion-no-padding ion-text-center gradient-with-background half-shadowed ion-align-items-center">
+            <div class="image-container-supp">
+              <img class="log-no-filter" src="../../../assets/images/support-ticket.png" alt="Item icon">
+              <ion-button class="wpc-button-sm-light ion-text-uppercase" size="small">{{ticket.status}}</ion-button>
+              <div class="with-badge">
+                <ion-badge color="danger">{{ticket.replies}}</ion-badge>
+              </div>
+            </div>
+          </ion-col>
+          <ion-col size="9" class="ion-no-padding">
+            <div class="inner-support-content">
+              <div class="supp-header">
+                <p class="label-bold ion-text-uppercase">{{ticket.date_created | date: "MMM dd,
+                  yyyy"}}</p>
+                <p class="label-bold ion-text-uppercase">{{ticket.name}}</p>
+              </div>
+              <div class="supp-body">
+                <p class="text-label-flex ion-text-uppercase"><span class="text-label-small">Subject:</span> <span
+                    class="label-sm-bold">{{ticket.subject}}</span></p>
+              </div>
+            </div>
+          </ion-col>
+        </ion-row>
+      </ion-grid> -->
+
+      <div class="display-latest-details" *ngFor="let ticket of searchedList">
+        <div class="details content-0 greetings">
+          <div class="details content-1">
+            <div class="mopving-truck">
+              <h5 class="dark-blue ion-text-start title ion-margin">{{ticket.name}}</h5>
+              <p class="package-details" (click)="viewDetails( ticket.ID )">View Details >></p>
+            </div>
+
+            <div class="details-support">
+              <div class="img-0">
+                <div class="status">
+                  <h5 class="dark-blue ion-text-center ion-text-uppercase title ion-margin">{{ticket.status}}</h5>
+                  <div class="with-badge">
+                    <ion-badge color="danger">{{ticket.replies}}</ion-badge>
+                  </div>
+                </div>
+              </div>
+              <div class="txt-0">
+                <p class="package-details">{{ticket.name}}</p>
+                <p class="package-details">{{ticket.date_created | date: "MMM dd,
+                  yyyy"}}</p>
+                <p class="package-details">Subject:<span class="label-sm-bold">{{ticket.subject}}</span></p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section *ngIf="!searchingFlag && !searchedList">
+
+      <div class="display-latest-details" *ngFor="let ticket of tickets">
+        <div class="details content-0 greetings">
+          <div class="details content-1">
+            <div class="mopving-truck">
+              <h5 class="dark-blue ion-text-start title ion-margin">{{ticket.name}}</h5>
+              <p class="package-details" (click)="viewDetails( ticket.ID )">View Details >></p>
+            </div>
+
+            <div class="details-support">
+              <div class="img-0">
+                <div class="status">
+                  <h5 class="dark-blue ion-text-center ion-text-uppercase title ion-margin">{{ticket.status}}</h5>
+                  <div class="with-badge">
+                    <ion-badge color="danger">{{ticket.replies}}</ion-badge>
+                  </div>
+                </div>
+              </div>
+              <div class="txt-0">
+                <p class="package-details">{{ticket.name}}</p>
+                <p class="package-details">{{ticket.date_created | date: "MMM dd,
+                  yyyy"}}</p>
+                <p class="package-details">Subject:<span class="label-sm-bold">{{ticket.subject}}</span></p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- <ion-grid *ngFor="let ticket of tickets" class="ion-no-padding grid-with-background"
+        (click)="viewDetails( ticket.ID )">
+
+        <ion-row class="ion-no-padding shadowed">
+          <ion-col size="3"
+            class="ion-no-padding ion-text-center gradient-with-background half-shadowed ion-align-items-center">
+            
+          </ion-col>
+          <ion-col size="9" class="ion-no-padding">
+            <div class="inner-support-content">
+              <div class="supp-header">
+                <p class="label-bold ion-text-uppercase">{{ticket.date_created | date: "MMM dd,
+                  yyyy"}}</p>
+                <p class="label-bold ion-text-uppercase">{{ticket.name}}</p>
+              </div>
+              <div class="supp-body">
+                <p class="text-label-flex ion-text-uppercase"><span class="text-label-small">Subject:</span> <span
+                    class="label-sm-bold">{{ticket.subject}}</span></p>
+              </div>
+            </div>
+          </ion-col>
+        </ion-row>
+      </ion-grid> -->
+    </section>
+  </div>
+</ion-content>

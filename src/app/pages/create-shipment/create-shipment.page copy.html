@@ -1,0 +1,143 @@
+<ion-header [translucent]="true" id="dark_backgrounded">
+  <ion-toolbar color="clear">
+    <ion-buttons slot="secondary" style="width:100%;">
+      <ion-button routerLink="/home/accounts">
+        <img class="logout" src="../../../assets/images/logout.png" alt="Site Logo">
+      </ion-button>
+    </ion-buttons>
+    <ion-title>
+      <h5 class="white ion-text-uppercase">Create New Shipment</h5>
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+  <form [formGroup]="myForm" (ngSubmit)="submitCreateShipment()" *ngIf="!prapareFlag && !errorMessage ">
+    <ion-grid class="ion-padding-vertical">
+      <ion-row>
+        <ion-col size="12" size-sm="6" *ngFor="let fieldSection of shipmentFields">
+          <ion-text color="primary">
+            <h4 class="border-bottom">{{fieldSection.header}}</h4>
+          </ion-text>
+          <ion-list>
+            <ion-item *ngFor="let c of fieldSection.data ">
+              <ion-label position="stacked">{{c.label}} <span class="required" *ngIf="c.required">*</span></ion-label>
+              <div class="switchWrapper" [ngSwitch]="c.field_type">
+                <ion-input *ngSwitchDefault [type]="c.field_type" [formControlName]="c.field_key"></ion-input>
+                <ion-textarea *ngSwitchCase="'textarea'" [formControlName]="c.field_key"></ion-textarea>
+                <ion-datetime *ngSwitchCase="'date'" [formControlName]="c.field_key"></ion-datetime>
+                <ion-datetime *ngSwitchCase="'time'" [formControlName]="c.field_key"></ion-datetime>
+                <ion-datetime *ngSwitchCase="'datetime'" [formControlName]="c.field_key"></ion-datetime>
+                <!-- Select -->
+                <ion-select *ngSwitchCase="'select'" placeholder="Select {{c.label}}" [formControlName]="c.field_key">
+                  <ion-select-option *ngFor="let data of c.field_data " value="{{data}}">{{data}}</ion-select-option>
+                </ion-select>
+                <!-- Select Multiple-->
+                <ion-select *ngSwitchCase="'multiselect'" placeholder="Select {{c.label}}"
+                  [formControlName]="c.field_key" multiple="true">
+                  <ion-select-option *ngFor="let data of c.field_data " value="{{data}}">{{data}}</ion-select-option>
+                </ion-select>
+                <!-- Radio -->
+                <ion-select *ngSwitchCase="'radio'" placeholder="Select {{c.label}}" [formControlName]="c.field_key">
+                  <ion-select-option *ngFor="let data of c.field_data " value="{{data}}">{{data}}</ion-select-option>
+                </ion-select>
+                <!-- Checkbox -->
+                <ion-select *ngSwitchCase="'checkbox'" placeholder="Select {{c.label}}" [formControlName]="c.field_key"
+                  multiple="true">
+                  <ion-select-option *ngFor="let data of c.field_data " value="{{data}}">{{data}}</ion-select-option>
+                </ion-select>
+              </div>
+            </ion-item>
+          </ion-list>
+        </ion-col>
+      </ion-row>
+
+      <!-- Shipment Package -->
+      <ion-row>
+        <ion-col size="12">
+          <ion-text color="primary" class="ion-padding-bottom">
+            <h4 class="border-bottom">Packages <span class="required">*</span></h4>
+          </ion-text>
+          <!-- Package Form -->
+          <ion-card>
+            <ion-card-content>
+              <ion-list>
+                <ion-item *ngFor="let packageField of packageFields">
+                  <div class="switchWrapper" [ngSwitch]="packageField.field">
+                    <ion-label position="stacked">{{packageField.label}} <span class="required"
+                        *ngIf="packageField.required">*</span></ion-label>
+                    <ion-input *ngSwitchDefault [type]="packageField.field" class="tbl-field"
+                      name="{{packageField.metakey}}" [(ngModel)]="packageKeys[packageField.metakey]"
+                      [ngModelOptions]="{standalone: true}"></ion-input>
+                    <ion-datetime *ngSwitchCase="'date'" displayFormat="YYYY-MM-DD" class="tbl-field"
+                      name="{{packageField.metakey}}" [(ngModel)]="packageKeys[packageField.metakey]"
+                      [ngModelOptions]="{standalone: true}"></ion-datetime>
+                    <ion-datetime *ngSwitchCase="'time'" displayFormat="h:mm A" class="tbl-field"
+                      name="{{packageField.metakey}}" [(ngModel)]="packageKeys[packageField.metakey]"
+                      [ngModelOptions]="{standalone: true}"></ion-datetime>
+                    <!-- Select -->
+                    <ion-select *ngSwitchCase="'select'" placeholder="{{packageField.label}}" class="tbl-field"
+                      name="{{packageField.metakey}}" [(ngModel)]="packageKeys[packageField.metakey]"
+                      [ngModelOptions]="{standalone: true}">
+                      <ion-select-option *ngFor="let option of packageField.options"
+                        value="{{option}}">{{option}}</ion-select-option>
+                    </ion-select>
+                    <!-- Select Multiple-->
+                    <ion-select *ngSwitchCase="'multiselect'" placeholder="{{packageField.label}}" class="tbl-field"
+                      name="{{packageField.metakey}}" [(ngModel)]="packageKeys[packageField.metakey]"
+                      [ngModelOptions]="{standalone: true}" multiple="true">
+                      <ion-select-option *ngFor="let option of packageField.options"
+                        value="{{option}}">{{option}}</ion-select-option>
+                    </ion-select>
+                    <!-- Radio -->
+                    <ion-select *ngSwitchCase="'radio'" placeholder="{{packageField.label}}" class="tbl-field"
+                      name="{{packageField.metakey}}" [(ngModel)]="packageKeys[packageField.metakey]"
+                      [ngModelOptions]="{standalone: true}">
+                      <ion-select-option *ngFor="let option of packageField.options"
+                        value="{{option}}">{{option}}</ion-select-option>
+                    </ion-select>
+                    <!-- Checkbox -->
+                    <ion-select *ngSwitchCase="'checkbox'" placeholder="{{packageField.label}}" class="tbl-field"
+                      name="{{packageField.metakey}}" [(ngModel)]="packageKeys[packageField.metakey]"
+                      [ngModelOptions]="{standalone: true}" multiple="true">
+                      <ion-select-option *ngFor="let option of packageField.options"
+                        value="{{option}}">{{option}}</ion-select-option>
+                    </ion-select>
+                  </div>
+                </ion-item>
+                <ion-button slot="end" color="light" size="small" (click)="addPackage()">
+                  <ion-icon slot="start" name="add-circle-outline"></ion-icon>
+                  Add package
+                </ion-button>
+              </ion-list>
+            </ion-card-content>
+          </ion-card>
+          <div class="tbl-wrapper">
+            <table id="_package" class="tbl">
+              <thead>
+                <tr>
+                  <th style="width:80px !important;">Delete</th>
+                  <th *ngFor="let packageField of packageFields">{{packageField.label}}</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let data of packageData | keyvalue;  index as i">
+                  <td style="width:80px !important;" class="ion-text-center"><ion-icon (click)="deletePackage(data.key)"
+                      color="danger" name="trash"></ion-icon></td>
+                  <td *ngFor="let packageField of packageFields">{{packageData[i][packageField.metakey]}}</td>
+                </tr>
+              </tbody>
+              <tfoot *ngIf="!packageData.length">
+                <tr>
+                  <td [attr.colspan]="packageColumn" class="error-message">No item found!</td>
+                </tr>
+              </tfoot>
+            </table>
+          </div>
+        </ion-col>
+      </ion-row>
+
+    </ion-grid>
+  </form>
+</ion-content>

@@ -1,0 +1,78 @@
+<ion-content padding='true' class="backgrounded-white">
+  <div id="content-wrapper full-height-center">
+    <div id="logo-with-text">
+      <img src="../../../assets/images/logo-white.png" alt="kde-truck">
+    </div>
+    <div class="welcome-text-main">
+      <h1 class="smaller-text ion-text-center">Welcome Back</h1>
+      <section id="section-main-content">
+        <form>
+          <ion-grid class="underlined">
+            <!-- <ion-row class="ion-padding-bottom">
+              <ion-col size="12" class="ion-no-padding">
+                <ion-label class="label-bold" position="stacked">Nombre de Usuario</ion-label>
+              </ion-col>
+            </ion-row> -->
+
+            <ion-row class="ion-no-padding ion-align-items-center">
+              <ion-col size="1" class="ion-no-padding">
+                <img class="input-icon" src="../../../assets/images/email.png" alt="icon">
+              </ion-col>
+              <ion-col size="11" class="ion-no-padding">
+                <ion-input autocomplete="off" type="text" placeholder="Username or Email" name="username"
+                  [(ngModel)]="postData.username"></ion-input>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+
+          <ion-grid class="underlined">
+            <!-- <ion-row class="ion-padding-bottom">
+              <ion-col size="12" class="ion-no-padding">
+                <ion-label class="label-bold" position="stacked">Contraseña</ion-label>
+              </ion-col>
+            </ion-row> -->
+
+            <ion-row class="ion-no-padding ion-align-items-center">
+              <ion-col size="1" class="ion-no-padding">
+                <img class="input-icon" src="../../../assets/images/padlock.png" alt="icon">
+              </ion-col>
+              <ion-col size="11" class="ion-no-padding">
+                <ion-input autocomplete="off" type="password" placeholder="Password" name="password"
+                  [(ngModel)]="postData.password"></ion-input>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+
+          <ion-grid>
+            <ion-row>
+              <ion-col size="12" class="ion-text-center">
+                <ion-label color="primary" class="label-bold" position="stacked" routerLink="/forgot-password">Forgot
+                  Password ?</ion-label>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+
+          <ion-grid>
+            <ion-row>
+              <ion-col size="12" class="ion-text-center">
+                <ion-button fill="solid" class="wpc-button-green ion-text-uppercase" (click)="loginAction()"
+                  expand="full">LOGIN</ion-button>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+        </form>
+      </section>
+
+      <ion-grid>
+        <ion-row>
+          <ion-col size="12" class="ion-text-center">
+            <ion-text>New to Colex Cargo? </ion-text>
+            <ion-label color="primary" class="label-bold" position="stacked" routerLink="/signup">Create an
+              Account</ion-label>
+            <!-- <ion-button fill="solid" class="wpc-button-blue ion-text-uppercase" routerLink="/signup">SIGNUP</ion-button> -->
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </div>
+  </div>
+</ion-content>

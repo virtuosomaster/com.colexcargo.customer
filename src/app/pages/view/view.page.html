@@ -1,0 +1,157 @@
+<ion-header [translucent]="true" id="dark_backgrounded" class="ion-no-border">
+  <ion-toolbar color="clear">
+    <ion-buttons slot="secondary" style="width:100%;">
+      <ion-menu-button color="primary"></ion-menu-button>
+      <ion-button (click)="goToShipments()">
+        <ion-icon name="arrow-undo-circle-outline" color="primary"></ion-icon>
+      </ion-button>
+      <ion-title color="primary"><img id="app-logo" class="inner-page" src="../../assets/images/logo.png" alt="Site Logo"
+          height="35px"></ion-title>
+      <!-- <ion-searchbar class="custom-search" debounce="500" color="light" (search)="onSearchShipment()"
+        (ionClear)="onClear()" (ionInput)="onInput( )" placeholder="Buscar Envío" showCancelButton="never"
+        [(ngModel)]="search"></ion-searchbar> -->
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-margin ion-padding">
+  <div id="content-inner">
+    <ion-text color="primary" class="ion-text-center">
+      <h1 class="dark-blue ion-text-center title ion-margin">Track your delivery.</h1>
+      <h1 class="dark-blue ion-text-center title ion-margin">Easy and in real time.</h1>
+    </ion-text>
+    <ion-grid>
+      <ion-row>
+        <ion-col size = "12" class = "ion-text-right">
+          <ion-text color="primary" class = "ion-text-right" (click)="reload()">Clear</ion-text>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+    
+    <div class="background" *ngIf="!searchingFlag && !searchedList && !trackResult">
+      <form class="ion-margin" [formGroup]="trackShipment">
+        <ion-grid class="underlined">
+
+          <ion-row class="ion-no-padding ion-align-items-center">
+            <ion-col size="1" class="ion-no-padding">
+              <ion-icon name="navigate-circle-outline" color="primary"></ion-icon>
+            </ion-col>
+            <ion-col size="11" class="ion-no-padding">
+              <ion-input autocomplete="off" formControlName="shipment_number" type="text"
+                placeholder="Enter Tracking Number"></ion-input>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+
+        <div class="error-container">
+          <ng-container *ngFor="let validation of validation_messages.shipment_number">
+            <div class="error-message" color="danger"
+              *ngIf="trackShipment.get('shipment_number').hasError(validation.type) && (trackShipment.get('shipment_number').dirty || trackShipment.get('shipment_number').touched)">
+              <ion-icon name="information-circle-outline"></ion-icon>
+              <span class="error-text">{{ validation.message }}</span>
+            </div>
+          </ng-container>
+        </div>
+
+        <ion-grid>
+          <ion-row>
+            <ion-col size="12" class="ion-text-right ion-padding">
+              <ion-button fill="solid" class="wpc-button-sm-green ion-text-uppercase" expand="full"
+                (click)="submitTrackForm()">Track Now
+              </ion-button>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </form>
+    </div>
+
+    <div class="background" *ngIf="!searchingFlag && !searchedList && trackResult">
+
+      <div class="display-latest-details">
+        <div class="details content-0 greetings">
+          <div class="details content-1">
+            <div class="mopving-truck">
+              <h5 class="dark-blue ion-text-start title ion-margin">{{trackedShipment.post_title}}</h5>
+              <h5 class="dark-blue ion-text-center ion-text-uppercase title ion-margin">{{trackedShipment.status}}</h5>
+            </div>
+            <p class="package-details ion-padding-left ion-margin-left"
+              *ngFor="let package of trackedShipment.shipment_packages">
+              <span class="label-sm-indented" *ngIf="package['wpc-pm-weight']">{{package['wpc-pm-weight']}} Kg | </span>
+              <span class="label-sm-indented" *ngIf="package['wpc-pm-length']">{{package['wpc-pm-length']}} cm | </span>
+              <span class="label-sm-indented" *ngIf="package['wpc-pm-height']">{{package['wpc-pm-height']}} cm | </span>
+              <span class="label-sm-indented" *ngIf="package['wpc-pm-height']">{{package['wpc-pm-height']}} cm</span>
+            </p>
+            <p class="package-details">From: {{trackedShipment.wpcargo_shipper_address}}</p>
+            <p class="package-details">To: {{trackedShipment.wpcargo_receiver_address}}</p>
+          </div>
+        </div>
+
+        <div class="tracking-record">
+          <ion-icon name="storefront" color="primary" class="pickup-point"></ion-icon>
+          <div class="travel">
+            <div class="car">
+              <div class="carbody">
+                <div class="carbody-1">
+                  <p class="small-text">COLEX</p>
+                </div>
+                <div class="carbody-2"></div>
+              </div>
+              <div class="carcycle">
+                <div class="carcycle-1"></div>
+                <div class="carcycle-2"></div>
+              </div>
+            </div>
+          </div>
+          <hr class="road" />
+          <ion-icon name="cube" color="primary" class="dropoff-point"></ion-icon>
+        </div>
+
+        <!-- Shipment History -->
+        <div class="shipment-history">
+          <ion-grid>
+            <ion-row *ngFor="let history of shipmentHistory">
+              <ion-col size="1"><ion-icon name="heart-circle-outline" color=primary></ion-icon></ion-col>
+              <ion-col size="4">
+                <p class="text-label-big">{{history.date | date: 'MMM
+                  dd yyyy'}}</p>
+                <!-- <p class="text-label-small ion-text-uppercase">{{field.value}}</p> -->
+              </ion-col>
+              <ion-col size="7">
+                <p class="text-label-big">{{history.status}}</p>
+                <p class="text-label-small ion-text-uppercase">{{history.location}}</p>
+                <p class="text-label-small ion-text-uppercase">{{history.remarks}}</p>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+        </div>
+
+        <div class="status">
+          <ion-button color="secondary" expand="full" size="small" shape="default" (click)="showDetails()"><ion-icon
+              name="{{showDetailIcon}}" slot="end" color="primary"></ion-icon> View Shipment Details
+          </ion-button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Shipment Details -->
+    <div class="details-section" *ngIf="showDetail">
+        <!-- Dynamic Custom Fields -->
+        <ion-grid *ngFor="let section of shipmentAllData" class="grid-with-background ion-no-padding">
+          <ion-row class="row-with-background ion-align-items-center" [attr.data-sectionIndex]="section.sectionIndex" (click)="handleClick($event)">
+            <ion-col size="11">
+              <h5 class="white ion-text-uppercase">{{ section.sectionLabel }}</h5>
+            </ion-col>
+          </ion-row>
+
+          <ion-row *ngIf="section.sectionView" class="ion-align-items-center padded-row">
+            <ion-col size="12">
+              <div class="text-label-flex" *ngFor="let field of section.sectionData">
+                <p class="text-label-small ion-text-uppercase">{{ field.label }}</p>
+                <p class="text-label-big" style="margin-bottom: 0.3rem !important;">{{ field.value || 'N/A' }}</p>
+              </div>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+    </div>
+  </div>
+</ion-content>

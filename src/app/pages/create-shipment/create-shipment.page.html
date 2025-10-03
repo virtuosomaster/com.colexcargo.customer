@@ -1,0 +1,220 @@
+<ion-header [translucent]="true" id="dark_backgrounded" class="ion-no-border">
+  <ion-toolbar color="clear">
+    <ion-buttons slot="secondary" style="width:100%;">
+      <ion-menu-button color="primary"></ion-menu-button>
+      <!-- <ion-button (click)="goToShipments()">
+        <ion-icon name="arrow-undo-circle-outline" color="primary"></ion-icon>
+      </ion-button> -->
+      <ion-title color="primary"><img id="app-logo" class="inner-page" src="../../assets/images/logo.png" alt="Site Logo"
+          height="35px"></ion-title>
+      <!-- <ion-searchbar class="custom-search" debounce="500" color="light" (search)="onSearchShipment()"
+        (ionClear)="onClear()" (ionInput)="onInput( )" placeholder="Buscar Envío" showCancelButton="never"
+        [(ngModel)]="search"></ion-searchbar> -->
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-margin ion-padding create-shipment">
+  <div id="content-inner">
+    <ion-text color="clear" class="ion-text-start">
+      <h6 class="ion-text-center title ion-margin">Hello, {{authUserFullname}}!
+      </h6>
+      <P class="ion-text-center title ion-margin">Complete form below to book your shipment</P>
+    </ion-text>
+
+    <!-- Prapare Notification -->
+    <div class="ion-text-center ion-margin-vertical" *ngIf="prapareFlag">
+      <ion-text color="secondary">
+        <ion-spinner class="icon-vcenter" color="secondary" name="bubbles"></ion-spinner>
+        Preparing Form...
+      </ion-text>
+    </div>
+    <!-- Display Error Message -->
+    <div class="error-message ion-text-center ion-margin-bottom" *ngIf="errorMessage">
+      <ion-text>
+        <ion-icon name="alert" class="icon-vcenter"></ion-icon>
+        {{errorMessage}}
+      </ion-text>
+    </div>
+
+    <form [formGroup]="myForm" *ngIf="!prapareFlag && !errorMessage ">
+      <ion-grid class="ion-no-padding" *ngFor="let fieldSection of shipmentFields">
+        <ion-row class="row-with-background ion-align-items-center">
+          <ion-col size="12">
+            <h5 class="white ion-text-uppercase">{{fieldSection.header}}</h5>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col size="12" class="ion-padding padded-row">
+            <ion-grid *ngFor="let c of fieldSection.data">
+              <!-- <ion-row class="ion-padding-bottom">
+                <ion-col size="12" class="ion-no-padding">
+                  <ion-label class="label-bold" position="stacked">{{c.label}} <span class="required"
+                      *ngIf="c.required">*</span></ion-label>
+                </ion-col>
+                <ion-col size="12" class="ion-no-padding">
+                  <div class="error-container" *ngIf="has_errors[c.field_key] == true">
+                    <ng-container *ngFor="let validation of validation_messages[c.field_key]">
+                      <div class="error-message">
+                        <ion-icon name="information-circle-outline"></ion-icon>
+                        <span class="error-text">{{ validation.message }}</span>
+                      </div>
+                    </ng-container>
+                  </div>
+                </ion-col>
+              </ion-row> -->
+
+              <ion-row class="ion-no-padding ion-align-items-center">
+                <ion-col size="12" class="ion-no-padding">
+                  <ion-label class="label-bold" position="stacked">{{c.label}} <span class="required"
+                      *ngIf="c.required">*</span></ion-label>
+                </ion-col>
+                <ion-col size="12" class="ion-no-padding underlined">
+                  <div class="switchWrapper" [ngSwitch]="c.field_type">
+                    <ion-input *ngSwitchDefault [type]="c.field_type" [formControlName]="c.field_key"
+                      placeholder=""></ion-input>
+                    <ion-textarea *ngSwitchCase="'textarea'" [formControlName]="c.field_key"
+                      placeholder=""></ion-textarea>
+                    <!-- <ion-datetime *ngSwitchCase="'date'" [formControlName]="c.field_key"
+                      placeholder=""></ion-datetime>
+                    <ion-datetime *ngSwitchCase="'time'" [formControlName]="c.field_key"
+                      placeholder=""></ion-datetime>
+                    <ion-datetime *ngSwitchCase="'datetime'" [formControlName]="c.field_key"
+                      placeholder=""></ion-datetime> -->
+                    <!-- Select -->
+                    <ion-select *ngSwitchCase="'select'" placeholder="Select "
+                      [formControlName]="c.field_key">
+                      <ion-select-option *ngFor="let data of c.field_data "
+                        value="{{data}}">{{data}}</ion-select-option>
+                    </ion-select>
+                    <!-- Select Multiple-->
+                    <ion-select *ngSwitchCase="'multiselect'" placeholder="Select "
+                      [formControlName]="c.field_key" multiple="true">
+                      <ion-select-option *ngFor="let data of c.field_data "
+                        value="{{data}}">{{data}}</ion-select-option>
+                    </ion-select>
+                    <!-- Radio -->
+                    <ion-select *ngSwitchCase="'radio'" placeholder="Select "
+                      [formControlName]="c.field_key">
+                      <ion-select-option *ngFor="let data of c.field_data "
+                        value="{{data}}">{{data}}</ion-select-option>
+                    </ion-select>
+                    <!-- Checkbox -->
+                    <ion-select *ngSwitchCase="'checkbox'" placeholder="Select "
+                      [formControlName]="c.field_key" multiple="true">
+                      <ion-select-option *ngFor="let data of c.field_data "
+                        value="{{data}}">{{data}}</ion-select-option>
+                    </ion-select>
+                  </div>
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+
+      <ion-grid class="ion-no-padding">
+        <ion-row class="row-with-background ion-align-items-center">
+          <ion-col size="12">
+            <h5 class="white ion-text-uppercase">Packages</h5>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col size="12" class="padded-row ion-padding">
+            <ion-grid *ngFor="let packageField of packageFields">
+              <ion-row class="ion-no-padding ion-align-items-center">
+                <ion-col size="12" class="ion-no-padding underlined">
+                  <div class="switchWrapper" [ngSwitch]="packageField.field">
+                    <!-- <ion-label position="stacked">{{packageField.label}} <span class="required"
+                        *ngIf="packageField.required">*</span></ion-label> -->
+                    <ion-input *ngSwitchDefault [type]="packageField.field" class="tbl-field"
+                      name="{{packageField.metakey}}" [(ngModel)]="packageKeys[packageField.metakey]"
+                      [ngModelOptions]="{standalone: true}" placeholder="{{packageField.label}}"></ion-input>
+                    <ion-datetime *ngSwitchCase="'date'" displayFormat="YYYY-MM-DD" class="tbl-field"
+                      name="{{packageField.metakey}}" [(ngModel)]="packageKeys[packageField.metakey]"
+                      [ngModelOptions]="{standalone: true}"></ion-datetime>
+                    <ion-datetime *ngSwitchCase="'time'" displayFormat="h:mm A" class="tbl-field"
+                      name="{{packageField.metakey}}" [(ngModel)]="packageKeys[packageField.metakey]"
+                      [ngModelOptions]="{standalone: true}"></ion-datetime>
+                    <!-- Select -->
+                    <ion-select *ngSwitchCase="'select'" placeholder="{{packageField.label}}" class="tbl-field"
+                      name="{{packageField.metakey}}" [(ngModel)]="packageKeys[packageField.metakey]"
+                      [ngModelOptions]="{standalone: true}">
+                      <ion-select-option *ngFor="let option of packageField.options"
+                        value="{{option}}">{{option}}</ion-select-option>
+                    </ion-select>
+                    <!-- Select Multiple-->
+                    <ion-select *ngSwitchCase="'multiselect'" placeholder="{{packageField.label}}" class="tbl-field"
+                      name="{{packageField.metakey}}" [(ngModel)]="packageKeys[packageField.metakey]"
+                      [ngModelOptions]="{standalone: true}" multiple="true">
+                      <ion-select-option *ngFor="let option of packageField.options"
+                        value="{{option}}">{{option}}</ion-select-option>
+                    </ion-select>
+                    <!-- Radio -->
+                    <ion-select *ngSwitchCase="'radio'" placeholder="{{packageField.label}}" class="tbl-field"
+                      name="{{packageField.metakey}}" [(ngModel)]="packageKeys[packageField.metakey]"
+                      [ngModelOptions]="{standalone: true}">
+                      <ion-select-option *ngFor="let option of packageField.options"
+                        value="{{option}}">{{option}}</ion-select-option>
+                    </ion-select>
+                    <!-- Checkbox -->
+                    <ion-select *ngSwitchCase="'checkbox'" placeholder="{{packageField.label}}" class="tbl-field"
+                      name="{{packageField.metakey}}" [(ngModel)]="packageKeys[packageField.metakey]"
+                      [ngModelOptions]="{standalone: true}" multiple="true">
+                      <ion-select-option *ngFor="let option of packageField.options"
+                        value="{{option}}">{{option}}</ion-select-option>
+                    </ion-select>
+                  </div>
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+          </ion-col>
+        </ion-row>
+
+        <ion-row>
+          <ion-col size="12" class="padded-row ion-padding">
+            <ion-button class="ion-text-uppercase" expand="full" color="primary" size="small" (click)="addPackage()">
+              Add package
+              <ion-icon name="add-circle-outline"></ion-icon>
+            </ion-button>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col size="12">
+            <div class="tbl-wrapper">
+              <table id="_package" class="tbl">
+                <thead>
+                  <tr>
+                    <th style="width:80px !important;">Delete</th>
+                    <th *ngFor="let packageField of packageFields">{{packageField.label}}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let data of packageData | keyvalue;  index as i">
+                    <td style="width:80px !important;" class="ion-text-center"><ion-icon
+                        (click)="deletePackage(data.key)" color="danger" name="trash"></ion-icon></td>
+                    <td *ngFor="let packageField of packageFields">{{packageData[i][packageField.metakey]}}</td>
+                  </tr>
+                </tbody>
+                <tfoot *ngIf="!packageData.length">
+                  <tr>
+                    <td [attr.colspan]="packageColumn" class="error-message">No item found!</td>
+                  </tr>
+                </tfoot>
+              </table>
+            </div>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+      <ion-grid>
+        <ion-row>
+          <ion-col size="12" class="ion-text-center">
+            <ion-button type="submit" class="ion-text-uppercase" expand="full" color="primary"
+              (click)="submitCreateShipment()">Submit</ion-button>
+            <!-- [disabled]="!myForm.valid" -->
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </form>
+  </div>
+</ion-content>
