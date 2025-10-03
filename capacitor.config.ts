@@ -9,7 +9,7 @@ const config: CapacitorConfig = {
   },
   plugins: {
     EdgeToEdge: {
-      backgroundColor: "#ffffff"
+      backgroundColor: "#1a1e3a"
     }
   },
 };

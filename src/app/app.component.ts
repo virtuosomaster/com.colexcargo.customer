@@ -34,7 +34,7 @@ export class AppComponent {
       // Enable edge-to-edge support
       try {
         await EdgeToEdge.enable();
-        await EdgeToEdge.setBackgroundColor({ color: '#000000' }); // or any color you want
+        await EdgeToEdge.setBackgroundColor({ color: '#1a1e3a' }); // or any color you want
       } catch (error) {
         console.warn('EdgeToEdge plugin error:', error);
       }
